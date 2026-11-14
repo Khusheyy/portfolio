@@ -14,10 +14,114 @@ function initTheme() {
   root.className = getStoredTheme();
 }
 
+// Theme toggle icon: sun (light) -> moon (dark).
+// Adapted from Skiper UI "skiper4" ThemeToggleButton2 (https://skiper-ui.com),
+// inspired by https://toggles.dev/ (Alfie Jones). Animation lives in styles.css.
+var THEME_TOGGLE_SVG =
+  '<svg class="theme-toggle-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" ' +
+  'fill="currentColor" stroke-linecap="round" viewBox="0 0 32 32">' +
+  '<clipPath id="theme-toggle-clip"><path class="tt-cut" d="M0-5h30a1 1 0 0 0 9 13v24H0Z"/></clipPath>' +
+  '<g clip-path="url(#theme-toggle-clip)">' +
+  '<circle class="tt-core" cx="16" cy="16" r="8"/>' +
+  '<g class="tt-rays" stroke="currentColor" stroke-width="1.5">' +
+  '<path d="M16 5.5v-4"/><path d="M16 30.5v-4"/><path d="M1.5 16h4"/><path d="M26.5 16h4"/>' +
+  '<path d="m23.4 8.6 2.8-2.8"/><path d="m5.7 26.3 2.9-2.9"/>' +
+  '<path d="m5.8 5.8 2.8 2.8"/><path d="m23.4 23.4 2.9 2.9"/>' +
+  '</g></g></svg>';
+
+(function () {
+  var btn = document.querySelector('.theme-toggle');
+  if (btn && !btn.querySelector('.theme-toggle-svg')) {
+    btn.innerHTML = THEME_TOGGLE_SVG;
+  }
+})();
+
+// Theme toggle accessibility: announced as a "Dark mode" on/off switch
+function syncThemeToggle() {
+  var btn = document.querySelector('.theme-toggle');
+  if (!btn) return;
+  btn.setAttribute('role', 'switch');
+  btn.setAttribute('aria-checked', root.classList.contains('theme-dark') ? 'true' : 'false');
+  btn.setAttribute('aria-label', 'Dark mode');
+}
+
+function applyTheme(next) {
+  root.className = next;
+  syncThemeToggle();
+  try { localStorage.setItem(themeKey, next); } catch (e) { }
+  window.dispatchEvent(new CustomEvent('themechanged', { detail: { theme: next } }));
+}
+
+function prefersReducedMotion() {
+  try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+}
+
 function toggleTheme() {
   var next = root.classList.contains('theme-dark') ? 'theme-light' : 'theme-dark';
-  root.className = next;
-  try { localStorage.setItem(themeKey, next); } catch (e) { }
+
+  // Smooth crossfade of the whole page where supported; plain switch otherwise
+  if (document.startViewTransition && !prefersReducedMotion()) {
+    var transition = document.startViewTransition(function () {
+      applyTheme(next);
+      root.classList.add('theme-switching');
+    });
+    transition.finished.finally(function () {
+      root.classList.remove('theme-switching');
+    });
+  } else {
+    applyTheme(next);
+  }
+}
+
+// Keep the floating ⌘K button a direct child of <body> so page animations never move it
+(function () {
+  var fab = document.querySelector('.command-palette-fab');
+  if (fab && document.body && fab.parentNode !== document.body) {
+    document.body.appendChild(fab);
+  }
+})();
+
+// Navbar: show a soft divider once the page is scrolled
+function initHeaderScroll() {
+  var header = document.querySelector('.site-header');
+  if (!header) return;
+  var ticking = false;
+  function update() {
+    header.classList.toggle('is-scrolled', window.scrollY > 4);
+    ticking = false;
+  }
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame(update);
+    }
+  }, { passive: true });
+  update();
+}
+
+// Scroll reveal: cards fade/rise in as they enter the viewport
+var revealObserver = null;
+
+function revealOnScroll(elements) {
+  if (!elements || !elements.length) return;
+  if (!('IntersectionObserver' in window) || prefersReducedMotion()) return;
+
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  }
+
+  Array.prototype.forEach.call(elements, function (el, i) {
+    el.classList.add('reveal');
+    el.style.transitionDelay = ((i % 2) * 90) + 'ms';
+    revealObserver.observe(el);
+  });
 }
 
 //dynamic age counter
@@ -188,11 +292,14 @@ window.addEventListener("DOMContentLoaded", () => {
   if (themeToggle) {
     themeToggle.addEventListener('click', toggleTheme);
   }
+  syncThemeToggle();
   initCommandPalette();
   var paletteBtn = document.querySelector(".command-palette-btn");
   if (paletteBtn) {
     paletteBtn.addEventListener("click", openPalette);
   }
+  initHeaderScroll();
+  revealOnScroll(document.querySelectorAll('.project-card'));
   updateAge();
   setInterval(updateAge, 2);
   loadMediumBlogs();
@@ -206,7 +313,7 @@ async function loadMediumBlogs() {
   const loadingEl = list.querySelector(".blog-loading");
 
   try {
-    const res = await fetch("blogs.json");
+    const res = await fetch("data/blogs.json");
     if (!res.ok) throw new Error("failed to load blogs.json");
 
     const posts = await res.json();
@@ -255,6 +362,8 @@ async function loadMediumBlogs() {
       card.appendChild(contentDiv);
       list.appendChild(card);
     });
+
+    revealOnScroll(list.querySelectorAll('.blog-card'));
 
   } catch {
     if (loadingEl) loadingEl.textContent = "couldn't load posts right now.";

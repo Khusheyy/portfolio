@@ -2,24 +2,9 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>builds • khushi</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script>
-    (function () {
-      var key = 'theme';
-      var stored;
-      try { stored = localStorage.getItem(key); } catch (e) { }
-      if (stored !== 'theme-light' && stored !== 'theme-dark') {
-        try { stored = window.matchMedia('(prefers-color-scheme: light)').matches ? 'theme-light' : 'theme-dark'; } catch (e) { stored = 'theme-dark'; }
-      }
-      document.documentElement.className = stored;
-    })();
-  </script>
+  <script src="assets/js/head-common.js" defer></script>
+</head>
 
 <body>
   <div class="page">
@@ -28,7 +13,6 @@
         <a href="index.html" class="nav-link">home</a>
         <a href="builds.html" class="nav-link nav-link-active">builds</a>
         <a href="blogs.html" class="nav-link">blogs</a>
-        <!-- <a href="hi.html" class="nav-link">hi</a> -->
         <button class="theme-toggle" aria-label="Toggle theme">
           <i class="fa-regular fa-moon theme-icon-moon"></i>
           <i class="fa-regular fa-sun theme-icon-sun"></i>
@@ -43,141 +27,135 @@
         <p>Things i've built or am building.</p>
       </section>
 
-      <!-- here -->
       <section class="projects">
+        <div class="projects-grid">
 
-  <div class="projects-grid">
+          <!-- Project 1 = keystrike -->
+          <div class="project-card">
+            <div class="project-media-frame">
+              <video muted loop playsinline preload="metadata">
+                <source src="assets/videos/keystrike-new.mp4" type="video/mp4">
+              </video>
+            </div>
 
-    <!-- Project 1 = keystrike -->
-    <div class="project-card">
+            <div class="project-content">
+              <div class="project-header">
+                <h1 class="hero-title" style="padding-top: 0.9rem;">Keystrike</h1>
+              </div>
 
-      <video autoplay muted loop playsinline>
-        <source src="media/keystrike-new.mp4" type="video/mp4">
-      </video>
+              <p class="project-description">
+                Built an interactive typing test website with a real-time on-screen keyboard showing live
+                key-click effects, calculating and displaying WPM and accuracy scores at session end.
+                Designed a responsive, animation-rich UI delivering a smooth cross-device experience.
+              </p>
 
-      <div class="project-content">
+              <div class="project-tags">
+                <span>Typescript</span>
+                <span>Tailwind</span>
+                <span>Firebase</span>
+              </div>
 
-        <div class="project-header">
-          <h1 class="hero-title" style="padding-top: 0.9rem";>Keystrike</h1>
+              <div class="project-links">
+                <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank" rel="noreferrer">github</a>
+                <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank" rel="noreferrer">live link</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 = Moji -->
+          <div class="project-card">
+            <div class="project-media-frame">
+              <video muted loop playsinline preload="metadata">
+                <source src="assets/videos/moji.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="project-content">
+              <div class="project-header">
+                <h1 class="hero-title" style="padding-top: 0.9rem;">Moji</h1>
+              </div>
+
+              <p class="project-description">
+                Trained a CNN on 60,000 MNIST images using two convolutional layers (32 & 64 filters),
+                pooling, and fully-connected layers (128 → 10 neurons) to classify digits 0–9 with
+                confidence scores.
+              </p>
+
+              <div class="project-tags">
+                <span>Typescript</span>
+                <span>Tailwind</span>
+                <span>Firebase</span>
+              </div>
+
+              <div class="project-links">
+                <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank" rel="noreferrer">github</a>
+                <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank" rel="noreferrer">live link</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 = Cooked -->
+          <div class="project-card">
+            <div class="project-media-frame">
+              <img src="assets/images/cooked.png" alt="Cooked Project">
+            </div>
+
+            <div class="project-content">
+              <div class="project-header">
+                <h1 class="hero-title" style="padding-top: 0.9rem;">Cooked</h1>
+              </div>
+
+              <p class="project-description">
+                a simple website that takes in your twitter handle and roasts you based on your posts and profile
+              </p>
+
+              <div class="project-tags">
+                <span>Typescript</span>
+                <span>Tailwind</span>
+                <span>Firebase</span>
+              </div>
+
+              <div class="project-links">
+                <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank" rel="noreferrer">github</a>
+                <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank" rel="noreferrer">live link</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 4 = Movie Recommender System -->
+          <div class="project-card">
+            <div class="project-media-frame">
+              <video muted loop playsinline preload="metadata">
+                <source src="assets/videos/movie-recommender.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="project-content">
+              <div class="project-header">
+                <h1 class="hero-title" style="padding-top: 0.9rem;">Movie Recommender System</h1>
+              </div>
+
+              <p class="project-description">
+                Built a content-based recommendation engine using Bag of Words and Count Vectorization
+                on movie metadata, returning the top 5 most similar titles via cosine similarity on a single
+                input.
+              </p>
+
+              <div class="project-tags">
+                <span>Typescript</span>
+                <span>Tailwind</span>
+                <span>Firebase</span>
+              </div>
+
+              <div class="project-links">
+                <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank" rel="noreferrer">github</a>
+                <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank" rel="noreferrer">live link</a>
+              </div>
+            </div>
+          </div>
+
         </div>
-
-        <p class="project-description">
-          a simple typing test website built with typescript dfugyhustdhfjgkuhlcxbnvmbsgdhfgjdghfjkyudgfnh,kfbngh
-        </p>
-
-        <div class="project-tags">
-          <span>Typescript</span>
-          <span>Tailwind</span>
-          <span>Firebase</span>
-        </div>
-
-        <div class="project-links">
-          <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank">github</a>
-
-          <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank">live link</a>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Project 2 -->
-    <div class="project-card">
-
-      <video autoplay muted loop playsinline>
-        <source src="media/moji.mp4" type="video/mp4">
-      </video>
-
-      <div class="project-content">
-
-        <div class="project-header">
-          <h1 class="hero-title" style="padding-top: 0.9rem;">Moji</h1>
-        </div>
-
-        <p class="project-description">
-          a simple typing test website built with typescript dfugyhustdhfjgkuhlcxbnvmbsgdhfgjdghfjkyudgfnh,kfbngh
-        </p>
-
-        <div class="project-tags">
-          <span>Typescript</span>
-          <span>Tailwind</span>
-          <span>Firebase</span>
-        </div>
-
-        <div class="project-links">
-          <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank">github</a>
-
-          <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank">live link</a>
-        </div>
-        
-      </div>
-    </div>
-
-
-    <!-- Project 3 -->
-    <div class="project-card">
-
-      <img src="media/cooked.png" alt="Cooked Project">
-
-      <div class="project-content">
-
-        <div class="project-header">
-          <h1 class="hero-title" style="padding-top: 0.9rem;">Cooked</h1>
-        </div>
-
-        <p class="project-description">
-          a simple typing test website built with typescript dfugyhustdhfjgkuhlcxbnvmbsgdhfgjdghfjkyudgfnh,kfbngh
-        </p>
-
-        <div class="project-tags">
-          <span>Typescript</span>
-          <span>Tailwind</span>
-          <span>Firebase</span>
-        </div>
-
-        <div class="project-links">
-          <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank">github</a>
-
-          <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank">live link</a>
-        </div>
-        
-      </div>
-    </div>
-
-    <!-- Project 4 -->
-    <div class="project-card">
-
-      <video autoplay muted loop playsinline>
-        <source src="media/movie-recommender.mp4" type="video/mp4">
-      </video>
-
-      <div class="project-content">
-
-        <div class="project-header">
-          <h1 class="hero-title" style="padding-top: 0.9rem;">Movie Recommender System</h1>
-        </div>
-
-        <p class="project-description">
-          a simple typing test website built with typescript dfugyhustdhfjgkuhlcxbnvmbsgdhfgjdghfjkyudgfnh,kfbngh
-        </p>
-
-        <div class="project-tags">
-          <span>Typescript</span>
-          <span>Tailwind</span>
-          <span>Firebase</span>
-        </div>
-
-        <div class="project-links">
-          <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank">github</a>
-
-          <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank">live link</a>
-        </div>
-        
-      </div>
-    </div>
-
-  </div>
-
-</section>
+      </section>
 
       <footer class="footer">
         <div class="social-links">
@@ -201,8 +179,6 @@
           </a>
         </div>
       </footer>
-
-      
     </main>
   </div>
 
@@ -212,7 +188,46 @@
     <span class="key">K</span>
   </button>
 
-  <script src="script.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var frames = document.querySelectorAll('.project-media-frame');
+
+      frames.forEach(function (frame) {
+        var video = frame.querySelector('video');
+        if (!video) return;
+
+        // Play video when user hovers over the media frame, pause when they leave
+
+        frame.addEventListener('mouseenter', function () {
+          // pause all other videos
+          document.querySelectorAll('.project-media-frame video').forEach(function (v) {
+            if (v !== video) v.pause();
+          });
+
+          video.play().then(function () {
+            frame.classList.add('is-playing');
+          }).catch(function (err) {
+            console.warn('Playback error:', err);
+          });
+        });
+
+        frame.addEventListener('mouseleave', function () {
+          video.pause();
+          frame.classList.remove('is-playing');
+        });
+
+        // keep class in sync if play/pause happen programmatically
+        video.addEventListener('play', function () {
+          frame.classList.add('is-playing');
+        });
+
+        video.addEventListener('pause', function () {
+          frame.classList.remove('is-playing');
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
