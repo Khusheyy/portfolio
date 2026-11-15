@@ -993,10 +993,10 @@ html.theme-light .site-header.is-scrolled {
 }
 
 /* ===========================
-   Theme toggle: sun -> moon
-   Adapted from Skiper UI "skiper4" (ThemeToggleButton2), https://skiper-ui.com
-   which is inspired by https://toggles.dev/ (Alfie Jones).
-   light theme = sun, dark theme = moon
+   Theme toggle button
+   Adapted from Skiper UI "skiper26" ThemeToggleButton (https://skiper-ui.com),
+   original concept by rudrodip (https://github.com/rudrodip/theme-toggle-effect).
+   A half-filled circle inside a ring; they spin opposite ways on each switch.
 =========================== */
 .theme-toggle {
   display: inline-flex;
@@ -1005,7 +1005,7 @@ html.theme-light .site-header.is-scrolled {
   flex-shrink: 0;
   width: 32px;
   height: 32px;
-  padding: 6px;
+  padding: 5px;
   border: none;
   border-radius: 50%;
   background: transparent;
@@ -1040,26 +1040,23 @@ html.theme-light .theme-toggle {
   overflow: visible;
 }
 
-.theme-toggle-svg .tt-cut,
-.theme-toggle-svg .tt-core,
-.theme-toggle-svg .tt-rays {
+.theme-toggle-svg .tt-fill { fill: currentColor; }
+.theme-toggle-svg .tt-hole { fill: transparent; }
+
+.theme-toggle-svg .tt-inner,
+.theme-toggle-svg .tt-ring {
   transform-box: view-box;
-  transform-origin: 16px 16px;
-  transition: transform 0.35s ease-in-out, opacity 0.35s ease-in-out;
+  transform-origin: 120px 120px;
+  transition: transform 0.5s ease-in-out;
 }
 
-/* dark = moon: the cut slides over the circle, the circle grows, rays spin away */
-html.theme-dark .theme-toggle-svg .tt-cut {
-  transform: translate(-12px, 10px);
+/* dark theme: inner half-circle turns -180deg, ring turns +180deg */
+html.theme-dark .theme-toggle-svg .tt-inner {
+  transform: rotate(-180deg);
 }
 
-html.theme-dark .theme-toggle-svg .tt-core {
-  transform: scale(1.25); /* r 8 -> 10 */
-}
-
-html.theme-dark .theme-toggle-svg .tt-rays {
-  transform: rotate(-100deg) scale(0.5);
-  opacity: 0;
+html.theme-dark .theme-toggle-svg .tt-ring {
+  transform: rotate(180deg);
 }
 
 /* Page entrance: navbar stays steady, content rises in gently.
@@ -1180,11 +1177,10 @@ html.theme-switching *::after {
   transition: none !important;
 }
 
-/* ...except the toggle icon itself, so the sun -> moon morph stays visible */
-html.theme-switching .theme-toggle-svg .tt-cut,
-html.theme-switching .theme-toggle-svg .tt-core,
-html.theme-switching .theme-toggle-svg .tt-rays {
-  transition: transform 0.35s ease-in-out, opacity 0.35s ease-in-out !important;
+/* ...except the toggle icon itself, so its spin stays visible */
+html.theme-switching .theme-toggle-svg .tt-inner,
+html.theme-switching .theme-toggle-svg .tt-ring {
+  transition: transform 0.5s ease-in-out !important;
 }
 
 /* show only the live toggle during the crossfade (no ghost of the old icon) */
@@ -1195,6 +1191,37 @@ html.theme-switching .theme-toggle-svg .tt-rays {
 
 ::view-transition-new(theme-toggle) {
   animation: none;
+}
+
+/* Theme switch: the new theme spreads out in a circle from the toggle button.
+   Adapted from Skiper UI "skiper26" (https://skiper-ui.com), concept by rudrodip
+   (https://github.com/rudrodip/theme-toggle-effect). Only applies to theme
+   switches; page-to-page navigation keeps its soft crossfade. */
+:root {
+  --expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.theme-switching::view-transition-old(root),
+html.theme-switching::view-transition-new(root) {
+  mix-blend-mode: normal; /* no additive blending, so no bright flash inside the circle */
+}
+
+html.theme-switching::view-transition-old(root) {
+  animation: none;
+}
+
+html.theme-switching::view-transition-new(root) {
+  animation: theme-reveal 0.7s var(--expo-out);
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0px at var(--reveal-x, 50%) var(--reveal-y, 50%));
+  }
+
+  to {
+    clip-path: circle(var(--reveal-r, 150vmax) at var(--reveal-x, 50%) var(--reveal-y, 50%));
+  }
 }
 
 /* Respect users who prefer less motion */
@@ -1220,4 +1247,311 @@ html.theme-switching .theme-toggle-svg .tt-rays {
   ::view-transition-new(root) {
     animation: none;
   }
+}
+
+
+/* ==========================================================
+   NO NAVBAR + PROGRESSIVE BLUR (all pages) and
+   ONE-PAGE HOME (index.html only — scoped to .one-page)
+   home -> builds -> blogs -> cozy footer
+========================================================== */
+
+/* No navbar anymore: content starts a little higher (phones keep their 24px) */
+@media (min-width: 641px) {
+  .page {
+    padding-top: 40px;
+  }
+}
+
+/* Floating controls, bottom-right on every page: [theme toggle] [⌘K] */
+.floating-controls {
+  position: fixed;
+  right: calc(16px + env(safe-area-inset-right));
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 999; /* above the progressive blur (998), below the ⌘K palette (1000) */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.floating-controls .command-palette-fab {
+  position: static;
+}
+
+.floating-controls .theme-toggle {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  background: var(--bg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: color 0.3s ease, background-color 0.4s ease,
+    border-color 0.4s ease, box-shadow 0.3s ease, transform 0.25s ease;
+}
+
+.floating-controls .theme-toggle:hover {
+  background: var(--bg-alt);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.floating-controls .theme-toggle:active {
+  transform: scale(0.95);
+}
+
+/* ---------- Progressive blur ----------
+   Adapted from Skiper UI "skiper41" Progressive Blur (https://skiper-ui.com),
+   inspired by https://devouringdetails.com/
+   Tweak --pb-blur / heights to taste. */
+.progressive-blur {
+  --pb-blur: 4px;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  z-index: 998; /* below the floating controls (999) and the ⌘K palette (1000) */
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  backdrop-filter: blur(var(--pb-blur));
+  -webkit-backdrop-filter: blur(var(--pb-blur));
+  transition: opacity 0.5s ease, background 0.4s ease;
+}
+
+.progressive-blur--top {
+  top: 0;
+  height: 110px;
+  background: linear-gradient(to top, transparent, var(--bg));
+  -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent);
+  mask-image: linear-gradient(to bottom, #000 50%, transparent);
+  opacity: 0; /* fades in once you start scrolling, so it never covers content at rest */
+}
+
+.progressive-blur--bottom {
+  bottom: 0;
+  height: 110px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  -webkit-mask-image: linear-gradient(to top, #000 50%, transparent);
+  mask-image: linear-gradient(to top, #000 50%, transparent);
+}
+
+.progressive-blur.is-visible { opacity: 1; }
+.progressive-blur.is-hidden { opacity: 0; }
+
+/* ---------- Sections ---------- */
+.one-page .page-section {
+  margin-top: 112px;
+}
+
+/* tiny cozy divider between sections */
+.one-page .page-section::before {
+  content: "\00B7\00A0\00A0\2726\00A0\00A0\00B7";
+  display: block;
+  text-align: center;
+  color: var(--muted);
+  opacity: 0.45;
+  letter-spacing: 0.4em;
+  font-size: 12px;
+  margin-bottom: 56px;
+}
+
+/* gentle reveal for section content (class added by script.js) */
+.reveal {
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ==========================================================
+   Cozy lofi footer — edit the text in index.html,
+   colors in the --cozy-* tokens just below
+========================================================== */
+html.theme-dark {
+  --cozy-sky-top: #1E1A2B;
+  --cozy-sky-bottom: #3B3046;
+  --cozy-moon: #F3E6C4;
+  --cozy-star: #F5F3F0;
+  --cozy-mug: #C3B5D9;
+  --cozy-heart: #1B1917;
+}
+
+html.theme-light {
+  --cozy-sky-top: #E7DFF2;
+  --cozy-sky-bottom: #F7E7D9;
+  --cozy-moon: #E8C98A;
+  --cozy-star: #8B7AA8;
+  --cozy-mug: #8B7AA8;
+  --cozy-heart: #FAF9F7;
+}
+
+.cozy-footer {
+  width: 100%;
+  max-width: 800px;
+  margin: 128px auto 24px;
+  padding: 28px 28px 20px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 22px;
+  background: var(--bg-alt);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease;
+}
+
+.cozy-scene {
+  position: relative;
+  height: 150px;
+  margin-bottom: 22px;
+}
+
+/* the little window */
+.cozy-window {
+  position: absolute;
+  inset: 0 0 18px 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, var(--cozy-sky-top), var(--cozy-sky-bottom));
+  transition: border-color 0.4s ease;
+}
+
+/* window panes */
+.cozy-window::before,
+.cozy-window::after {
+  content: "";
+  position: absolute;
+  background: var(--border-subtle);
+  opacity: 0.7;
+}
+
+.cozy-window::before { top: 0; bottom: 0; left: 50%; width: 2px; }
+.cozy-window::after { left: 0; right: 0; top: 50%; height: 2px; }
+
+.cozy-moon {
+  position: absolute;
+  top: 18px;
+  right: 18%;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  box-shadow: 7px -4px 0 0 var(--cozy-moon);
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--cozy-moon) 55%, transparent));
+}
+
+.cozy-star {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--cozy-star);
+  opacity: 0.25;
+  animation: cozy-twinkle 3.2s ease-in-out infinite;
+}
+
+@keyframes cozy-twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 0.9; transform: scale(1.15); }
+}
+
+/* window sill */
+.cozy-scene::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  bottom: 12px;
+  height: 8px;
+  border-radius: 6px;
+  background: var(--border-subtle);
+}
+
+/* the mug on the sill */
+.cozy-mug {
+  position: absolute;
+  left: 28px;
+  bottom: 14px;
+  z-index: 1;
+  width: 64px;
+  height: 64px;
+}
+
+.cozy-mug-body { fill: var(--cozy-mug); }
+.cozy-mug-handle { stroke: var(--cozy-mug); stroke-width: 4; stroke-linecap: round; }
+.cozy-mug-heart { fill: var(--cozy-heart); opacity: 0.85; }
+
+.cozy-steam {
+  stroke: var(--muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: cozy-steam 3s ease-in-out infinite;
+}
+
+.cozy-steam:nth-child(2) { animation-delay: 0.6s; }
+.cozy-steam:nth-child(3) { animation-delay: 1.2s; }
+
+@keyframes cozy-steam {
+  0% { opacity: 0; transform: translateY(5px); }
+  40% { opacity: 0.7; }
+  100% { opacity: 0; transform: translateY(-7px); }
+}
+
+.cozy-text p { margin: 0 0 4px; }
+
+.cozy-title {
+  color: var(--fg);
+  font-size: 16px;
+  letter-spacing: 0.04em;
+}
+
+.cozy-now { margin-top: 12px !important; }
+
+.cozy-note {
+  display: inline-block;
+  color: var(--accent);
+  animation: cozy-bob 2.4s ease-in-out infinite;
+}
+
+@keyframes cozy-bob {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-3px) rotate(-8deg); }
+}
+
+.cozy-track { color: var(--accent); }
+
+.cozy-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-subtle);
+  font-size: 12px;
+}
+
+.cozy-top {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease;
+  display: inline-block;
+}
+
+.cozy-top:hover {
+  color: var(--fg);
+  transform: translateY(-2px);
+}
+
+.cozy-credit {
+  margin: 10px 0 0;
+  font-size: 10px;
+  opacity: 0.55;
+}
+
+.cozy-credit a { color: inherit; }
+
+@media (max-width: 640px) {
+  .one-page .page-section { margin-top: 80px; }
+  .cozy-footer { margin-top: 96px; padding: 20px 18px 16px; border-radius: 18px; }
+  .cozy-scene { height: 120px; }
+  .cozy-mug { width: 52px; height: 52px; left: 18px; }
 }

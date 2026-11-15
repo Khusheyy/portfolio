@@ -14,27 +14,32 @@ function initTheme() {
   root.className = getStoredTheme();
 }
 
-// Theme toggle icon: sun (light) -> moon (dark).
-// Adapted from Skiper UI "skiper4" ThemeToggleButton2 (https://skiper-ui.com),
-// inspired by https://toggles.dev/ (Alfie Jones). Animation lives in styles.css.
+// Theme toggle icon: half-filled circle inside a ring; both spin on every switch.
+// Adapted from Skiper UI "skiper26" ThemeToggleButton (https://skiper-ui.com),
+// original concept by rudrodip (https://github.com/rudrodip/theme-toggle-effect).
+// Animation + colors live in styles.css.
 var THEME_TOGGLE_SVG =
   '<svg class="theme-toggle-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" ' +
-  'fill="currentColor" stroke-linecap="round" viewBox="0 0 32 32">' +
-  '<clipPath id="theme-toggle-clip"><path class="tt-cut" d="M0-5h30a1 1 0 0 0 9 13v24H0Z"/></clipPath>' +
-  '<g clip-path="url(#theme-toggle-clip)">' +
-  '<circle class="tt-core" cx="16" cy="16" r="8"/>' +
-  '<g class="tt-rays" stroke="currentColor" stroke-width="1.5">' +
-  '<path d="M16 5.5v-4"/><path d="M16 30.5v-4"/><path d="M1.5 16h4"/><path d="M26.5 16h4"/>' +
-  '<path d="m23.4 8.6 2.8-2.8"/><path d="m5.7 26.3 2.9-2.9"/>' +
-  '<path d="m5.8 5.8 2.8 2.8"/><path d="m23.4 23.4 2.9 2.9"/>' +
-  '</g></g></svg>';
+  'fill="none" viewBox="0 0 240 240">' +
+  '<g class="tt-inner">' +
+  '<path class="tt-fill" d="M120 67.5C149.25 67.5 172.5 90.75 172.5 120C172.5 149.25 149.25 172.5 120 172.5"/>' +
+  '<path class="tt-hole" d="M120 67.5C90.75 67.5 67.5 90.75 67.5 120C67.5 149.25 90.75 172.5 120 172.5"/>' +
+  '</g>' +
+  '<path class="tt-ring tt-fill" d="M120 3.75C55.5 3.75 3.75 55.5 3.75 120C3.75 184.5 55.5 236.25 120 236.25' +
+  'C184.5 236.25 236.25 184.5 236.25 120C236.25 55.5 184.5 3.75 120 3.75ZM120 214.5V172.5C90.75 172.5 67.5 149.25 67.5 120' +
+  'C67.5 90.75 90.75 67.5 120 67.5V25.5C172.5 25.5 214.5 67.5 214.5 120C214.5 172.5 172.5 214.5 120 214.5Z"/>' +
+  '</svg>';
 
-(function () {
+function createThemeToggle() {
   var btn = document.querySelector('.theme-toggle');
-  if (btn && !btn.querySelector('.theme-toggle-svg')) {
-    btn.innerHTML = THEME_TOGGLE_SVG;
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'theme-toggle';
   }
-})();
+  if (!btn.querySelector('.theme-toggle-svg')) btn.innerHTML = THEME_TOGGLE_SVG;
+  return btn;
+}
 
 // Theme toggle accessibility: announced as a "Dark mode" on/off switch
 function syncThemeToggle() {
@@ -56,14 +61,30 @@ function prefersReducedMotion() {
   try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
 }
 
-function toggleTheme() {
+function toggleTheme(e) {
   var next = root.classList.contains('theme-dark') ? 'theme-light' : 'theme-dark';
 
-  // Smooth crossfade of the whole page where supported; plain switch otherwise
+  // Circular theme reveal from the toggle button where supported; plain switch otherwise.
+  // Adapted from Skiper UI "skiper26" (https://skiper-ui.com),
+  // original concept by rudrodip (https://github.com/rudrodip/theme-toggle-effect).
   if (document.startViewTransition && !prefersReducedMotion()) {
+    var btn = document.querySelector('.theme-toggle');
+    var x = window.innerWidth / 2, y = window.innerHeight / 2;
+    if (btn) {
+      var r = btn.getBoundingClientRect();
+      x = r.left + r.width / 2;
+      y = r.top + r.height / 2;
+    }
+    // radius that reaches the farthest corner of the screen
+    var radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+    root.style.setProperty('--reveal-x', x + 'px');
+    root.style.setProperty('--reveal-y', y + 'px');
+    root.style.setProperty('--reveal-r', Math.ceil(radius) + 'px');
+    root.classList.add('theme-switching');
+
     var transition = document.startViewTransition(function () {
       applyTheme(next);
-      root.classList.add('theme-switching');
+      root.classList.add('theme-switching'); // applyTheme resets the class list
     });
     transition.finished.finally(function () {
       root.classList.remove('theme-switching');
@@ -73,29 +94,58 @@ function toggleTheme() {
   }
 }
 
-// Keep the floating ⌘K button a direct child of <body> so page animations never move it
+// Floating controls, bottom-right on every page: [theme toggle] [⌘K]
+// (direct child of <body>, so page animations never move them)
 (function () {
+  if (!document.body || document.querySelector('.floating-controls')) return;
+  var controls = document.createElement('div');
+  controls.className = 'floating-controls';
+  controls.appendChild(createThemeToggle());
   var fab = document.querySelector('.command-palette-fab');
-  if (fab && document.body && fab.parentNode !== document.body) {
-    document.body.appendChild(fab);
-  }
+  if (fab) controls.appendChild(fab);
+  document.body.appendChild(controls);
 })();
 
-// Navbar: show a soft divider once the page is scrolled
-function initHeaderScroll() {
-  var header = document.querySelector('.site-header');
-  if (!header) return;
+// Progressive blur at the top and bottom of the screen on every page.
+// Adapted from Skiper UI "skiper41" Progressive Blur (https://skiper-ui.com),
+// inspired by https://devouringdetails.com/. Styles live in styles.css.
+(function () {
+  if (!document.body || document.querySelector('.progressive-blur')) return;
+  ['top', 'bottom'].forEach(function (pos) {
+    var el = document.createElement('div');
+    el.className = 'progressive-blur progressive-blur--' + pos;
+    el.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(el);
+  });
+})();
+
+// Top blur appears once you scroll (so it never covers content at rest);
+// bottom blur fades away when you reach the end of the page
+function initScrollEffects() {
+  var blurTop = document.querySelector('.progressive-blur--top');
+  var blurBottom = document.querySelector('.progressive-blur--bottom');
   var ticking = false;
+
   function update() {
-    header.classList.toggle('is-scrolled', window.scrollY > 4);
+    var y = window.scrollY;
+    if (blurTop) blurTop.classList.toggle('is-visible', y > 4);
+    if (blurBottom) {
+      var atBottom = window.innerHeight + y >= document.documentElement.scrollHeight - 40;
+      blurBottom.classList.toggle('is-hidden', atBottom);
+    }
     ticking = false;
   }
-  window.addEventListener('scroll', function () {
+
+  function requestUpdate() {
     if (!ticking) {
       ticking = true;
       window.requestAnimationFrame(update);
     }
-  }, { passive: true });
+  }
+
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+  window.addEventListener('load', requestUpdate); // page height changes once images/blogs load
   update();
 }
 
@@ -148,9 +198,9 @@ function updateAge() {
 
 // Command palette — pages list (same on every page)
 var PALETTE_PAGES = [
-  { label: "home", path: "index.html", slug: "/" },
-  { label: "builds", path: "builds.html", slug: "/builds" },
-  { label: "blogs", path: "blogs.html", slug: "/blogs" },
+  { label: "home", path: "index.html#home", slug: "/" },
+  { label: "builds", path: "index.html#builds", slug: "/builds" },
+  { label: "blogs", path: "index.html#blogs", slug: "/blogs" },
   { label: "hi", path: "hi.html", slug: "/hi" },
   { label: "my journey on x", path: "myjourneyonx.html", slug: "/myjourneyonx" },
   { label: "people", path: "people.html", slug: "/people" },
@@ -175,6 +225,7 @@ function renderPaletteItems() {
     a.innerHTML = p.label + "<span>" + p.slug + "</span>";
     a.addEventListener("click", function (e) {
       e.preventDefault();
+      closePalette();
       window.location.href = p.path;
     });
     paletteListEl.appendChild(a);
@@ -221,6 +272,7 @@ function onPaletteKeydown(e) {
   if (e.key === "Enter") {
     e.preventDefault();
     if (filteredPages[selectedIndex]) {
+      closePalette();
       window.location.href = filteredPages[selectedIndex].path;
     }
   }
@@ -298,8 +350,9 @@ window.addEventListener("DOMContentLoaded", () => {
   if (paletteBtn) {
     paletteBtn.addEventListener("click", openPalette);
   }
-  initHeaderScroll();
+  initScrollEffects();
   revealOnScroll(document.querySelectorAll('.project-card'));
+  revealOnScroll(document.querySelectorAll('.one-page .page-section > .hero-title, .one-page .page-section > .about, .one-page .cozy-footer'));
   updateAge();
   setInterval(updateAge, 2);
   loadMediumBlogs();

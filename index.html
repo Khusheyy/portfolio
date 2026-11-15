@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <meta charset="UTF-8">
   <title>khushi <3 </title>
   <script src="assets/js/head-common.js" defer></script>
 
@@ -42,22 +43,10 @@
   </style>
 </head>
 
-<body>
+<body class="one-page">
   <div class="page">
-    <header class="site-header">
-      <nav class="nav">
-        <a href="index.html" class="nav-link nav-link-active">home</a>
-        <a href="builds.html" class="nav-link">builds</a>
-        <a href="blogs.html" class="nav-link">blogs</a>
-        <!-- <a href="hi.html" class="nav-link">hi</a> -->
-        <button class="theme-toggle" aria-label="Toggle theme">
-          <i class="fa-regular fa-moon theme-icon-moon"></i>
-          <i class="fa-regular fa-sun theme-icon-sun"></i>
-        </button>
-      </nav>
-    </header>
 
-    <div class="banner">
+    <div class="banner" id="home">
       <img src="assets/images/sky.png" alt="banner">
     </div>
 
@@ -105,6 +94,190 @@
         </div>
       </footer>
     </main>
+
+    <!-- ===================== builds (content from builds.html) ===================== -->
+    <section id="builds" class="content page-section">
+      <h1 class="hero-title" style="padding-top: 2rem;">builds</h1>
+
+      <section class="about">
+        <p>Things i've built or am building.</p>
+      </section>
+
+      <section class="projects">
+        <div class="projects-grid">
+
+          <!-- Project 1 = keystrike -->
+          <div class="project-card">
+            <div class="project-media-frame">
+              <video muted loop playsinline preload="metadata">
+                <source src="assets/videos/keystrike-new.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="project-content">
+              <div class="project-header">
+                <h1 class="hero-title" style="padding-top: 0.9rem;">Keystrike</h1>
+              </div>
+
+              <p class="project-description">
+                Built an interactive typing test website with a real-time on-screen keyboard showing live
+                key-click effects, calculating and displaying WPM and accuracy scores at session end.
+                Designed a responsive, animation-rich UI delivering a smooth cross-device experience.
+              </p>
+
+              <div class="project-tags">
+                <span>Typescript</span>
+                <span>Tailwind</span>
+                <span>Firebase</span>
+              </div>
+
+              <div class="project-links">
+                <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank" rel="noreferrer">github</a>
+                <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank" rel="noreferrer">live link</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 2 = Moji -->
+          <div class="project-card">
+            <div class="project-media-frame">
+              <video muted loop playsinline preload="metadata">
+                <source src="assets/videos/moji.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="project-content">
+              <div class="project-header">
+                <h1 class="hero-title" style="padding-top: 0.9rem;">Moji</h1>
+              </div>
+
+              <p class="project-description">
+                Trained a CNN on 60,000 MNIST images using two convolutional layers (32 & 64 filters),
+                pooling, and fully-connected layers (128 → 10 neurons) to classify digits 0–9 with
+                confidence scores.
+              </p>
+
+              <div class="project-tags">
+                <span>Typescript</span>
+                <span>Tailwind</span>
+                <span>Firebase</span>
+              </div>
+
+              <div class="project-links">
+                <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank" rel="noreferrer">github</a>
+                <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank" rel="noreferrer">live link</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 3 = Cooked -->
+          <div class="project-card">
+            <div class="project-media-frame">
+              <img src="assets/images/cooked.png" alt="Cooked Project">
+            </div>
+
+            <div class="project-content">
+              <div class="project-header">
+                <h1 class="hero-title" style="padding-top: 0.9rem;">Cooked</h1>
+              </div>
+
+              <p class="project-description">
+                a simple website that takes in your twitter handle and roasts you based on your posts and profile
+              </p>
+
+              <div class="project-tags">
+                <span>Typescript</span>
+                <span>Tailwind</span>
+                <span>Firebase</span>
+              </div>
+
+              <div class="project-links">
+                <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank" rel="noreferrer">github</a>
+                <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank" rel="noreferrer">live link</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 4 = Movie Recommender System -->
+          <div class="project-card">
+            <div class="project-media-frame">
+              <video muted loop playsinline preload="metadata">
+                <source src="assets/videos/movie-recommender.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="project-content">
+              <div class="project-header">
+                <h1 class="hero-title" style="padding-top: 0.9rem;">Movie Recommender System</h1>
+              </div>
+
+              <p class="project-description">
+                Built a content-based recommendation engine using Bag of Words and Count Vectorization
+                on movie metadata, returning the top 5 most similar titles via cosine similarity on a single
+                input.
+              </p>
+
+              <div class="project-tags">
+                <span>Typescript</span>
+                <span>Tailwind</span>
+                <span>Firebase</span>
+              </div>
+
+              <div class="project-links">
+                <a style="color: var(--accent)" href="https://github.com/Khusheyy/keystrike" target="_blank" rel="noreferrer">github</a>
+                <a style="color: var(--accent)" href="https://typo-type.vercel.app/" target="_blank" rel="noreferrer">live link</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </section>
+
+    <!-- ===================== blogs (content from blogs.html) ===================== -->
+    <section id="blogs" class="content page-section">
+      <h1 class="hero-title" style="padding-top: 2rem;">blogs</h1>
+
+      <section id="blog-list" class="blog-list">
+        <p class="blog-loading">fetching posts from medium…</p>
+      </section>
+    </section>
+
+    <!-- ===================== cozy footer: edit anything in here ===================== -->
+    <footer class="cozy-footer">
+      <div class="cozy-scene" aria-hidden="true">
+        <div class="cozy-window">
+          <span class="cozy-moon"></span>
+          <span class="cozy-star" style="top: 22%; left: 12%;"></span>
+          <span class="cozy-star" style="top: 58%; left: 22%; animation-delay: 0.8s;"></span>
+          <span class="cozy-star" style="top: 30%; left: 38%; animation-delay: 1.6s;"></span>
+          <span class="cozy-star" style="top: 66%; left: 56%; animation-delay: 0.4s;"></span>
+          <span class="cozy-star" style="top: 18%; left: 64%; animation-delay: 2.2s;"></span>
+          <span class="cozy-star" style="top: 48%; left: 88%; animation-delay: 1.2s;"></span>
+        </div>
+        <svg class="cozy-mug" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path class="cozy-steam" d="M24 22c-3-4 3-6 0-10" />
+          <path class="cozy-steam" d="M32 22c-3-4 3-6 0-10" />
+          <path class="cozy-steam" d="M40 22c-3-4 3-6 0-10" />
+          <path class="cozy-mug-handle" d="M48 32h3a6 6 0 0 1 0 12h-3" />
+          <rect class="cozy-mug-body" x="16" y="26" width="32" height="26" rx="6" />
+          <path class="cozy-mug-heart" d="M32 44l-4.5-4.3a2.8 2.8 0 0 1 4.5-3.3 2.8 2.8 0 0 1 4.5 3.3Z" />
+        </svg>
+      </div>
+
+      <div class="cozy-text">
+        <p class="cozy-title">thanks for stopping by ✿</p>
+        <p class="cozy-sub">grab a warm drink and stay as long as you like.</p>
+        <p class="cozy-now"><span class="cozy-note">♪</span> now playing: <span class="cozy-track">lofi beats &amp; soft rain</span></p>
+      </div>
+
+      <div class="cozy-bottom">
+        <span>made with ♡ by khushi · 2026</span>
+        <a href="#home" class="cozy-top">back to top ↑</a>
+      </div>
+
+      <p class="cozy-credit">ui bits inspired by <a href="https://skiper-ui.com" target="_blank" rel="noreferrer">skiper ui</a></p>
+    </footer>
   </div>
 
   <button type="button" class="command-palette-btn command-palette-fab" aria-label="Open navigator (command + k)">
@@ -114,6 +287,45 @@
   </button>
 
   <script src="assets/js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var frames = document.querySelectorAll('.project-media-frame');
+
+      frames.forEach(function (frame) {
+        var video = frame.querySelector('video');
+        if (!video) return;
+
+        // Play video when user hovers over the media frame, pause when they leave
+
+        frame.addEventListener('mouseenter', function () {
+          // pause all other videos
+          document.querySelectorAll('.project-media-frame video').forEach(function (v) {
+            if (v !== video) v.pause();
+          });
+
+          video.play().then(function () {
+            frame.classList.add('is-playing');
+          }).catch(function (err) {
+            console.warn('Playback error:', err);
+          });
+        });
+
+        frame.addEventListener('mouseleave', function () {
+          video.pause();
+          frame.classList.remove('is-playing');
+        });
+
+        // keep class in sync if play/pause happen programmatically
+        video.addEventListener('play', function () {
+          frame.classList.add('is-playing');
+        });
+
+        video.addEventListener('pause', function () {
+          frame.classList.remove('is-playing');
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
