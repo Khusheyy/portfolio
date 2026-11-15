@@ -927,7 +927,14 @@ html.theme-light {
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 72px; /* keep anchored content clear of the fixed navbar */
+  scroll-padding-top: 72px; /* keep anchored content clear of the top blur */
+}
+
+/* Let the page itself scroll (not <body>). With height:100% + overflow-x:hidden,
+   <body> had become its own scroll box, so window scroll effects never fired. */
+body {
+  height: auto;
+  min-height: 100%;
 }
 
 /* Navbar tint = page background (warm), slightly translucent for the glass blur */
