@@ -1562,3 +1562,41 @@ html.theme-light {
   .cozy-scene { height: 120px; }
   .cozy-mug { width: 52px; height: 52px; left: 18px; }
 }
+
+/* ==========================================================
+   Scroll reveal, matched to https://cookified.github.io/
+   Content rises 10px and fades in on a spring
+   (Framer Motion: stiffness 140, damping 22, mass 1),
+   sampled into CSS linear() easing. Older browsers fall back
+   to a close cubic-bezier. Reduced-motion users still skip it.
+========================================================== */
+:root {
+  --reveal-spring: cubic-bezier(0.25, 1, 0.4, 1);
+}
+
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --reveal-spring: linear(0, 0.0584, 0.1852, 0.3323, 0.4739, 0.5981, 0.7008,
+      0.7823, 0.8448, 0.8916, 0.9258, 0.9503, 0.9675, 0.9793, 0.9872, 0.9924,
+      0.9957, 0.9978, 0.9991, 0.9998, 1);
+  }
+}
+
+.reveal {
+  translate: 0 10px;
+  transition: opacity 0.65s var(--reveal-spring), translate 0.65s var(--reveal-spring);
+}
+
+.reveal.is-visible {
+  translate: 0 0;
+}
+
+.project-card.reveal,
+.blog-card.reveal {
+  transition:
+    opacity 0.65s var(--reveal-spring),
+    translate 0.65s var(--reveal-spring),
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}

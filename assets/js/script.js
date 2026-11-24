@@ -164,7 +164,10 @@ function revealOnScroll(elements) {
           revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    // Trigger matches cookified.github.io (Framer Motion whileInView,
+    // viewport { once: true, margin: "-40px" }): start as soon as any part
+    // of the element is 40px inside the viewport.
+    }, { threshold: 0, rootMargin: '-40px' });
   }
 
   Array.prototype.forEach.call(elements, function (el, i) {
