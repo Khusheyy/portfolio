@@ -207,7 +207,6 @@ var PALETTE_PAGES = [
   { label: "hi", path: "hi.html", slug: "/hi" },
   { label: "my journey on x", path: "myjourneyonx.html", slug: "/myjourneyonx" },
   { label: "people", path: "people.html", slug: "/people" },
-  { label: "values", path: "values.html", slug: "/values" },
   { label: "collections", path: "collections.html", slug: "/collections" },
 ];
 
@@ -355,7 +354,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
   initScrollEffects();
   revealOnScroll(document.querySelectorAll('.project-card'));
-  revealOnScroll(document.querySelectorAll('.one-page .page-section > .hero-title, .one-page .page-section > .about, .one-page .cozy-footer'));
+  revealOnScroll(document.querySelectorAll('.one-page .page-section > .hero-title, .one-page .page-section > .about'));
   updateAge();
   setInterval(updateAge, 2);
   loadMediumBlogs();

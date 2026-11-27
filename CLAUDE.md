@@ -30,7 +30,7 @@ It deploys from the `main` branch of https://github.com/Khusheyy/portfolio.git.
 
 Change shared head assets there, not in each page.
 
-**Shared behavior.** `assets/js/script.js` loads at the end of the body on every page except `values.html`, which is currently an empty stub. It builds these elements at runtime, so you won't find them in the HTML:
+**Shared behavior.** `assets/js/script.js` loads at the end of the body on every page. It builds these elements at runtime, so you won't find them in the HTML:
 - `.floating-controls` (fixed bottom-right). It holds the theme toggle, created by `createThemeToggle()`, and the `.command-palette-fab` (⌘K button), which is moved in from the page markup.
 - `.progressive-blur--top` and `--bottom` overlays, a vanilla port of Skiper UI's skiper41. `initScrollEffects()` toggles their `is-visible` / `is-hidden` classes from `window.scrollY`.
 - The command palette. Its destinations come from `PALETTE_PAGES`; home, builds and blogs point to `index.html#home`, `#builds` and `#blogs`.
@@ -47,15 +47,16 @@ Change shared head assets there, not in each page.
 - `index.html` (`body.one-page`) is the one-page home. In order, it holds:
   1. the home content,
   2. `<section id="builds">`, a verbatim copy of `builds.html`'s content,
-  3. `<section id="blogs">`,
-  4. a hand-editable "cozy" lofi footer (`.cozy-footer`).
+  3. `<section id="blogs">`.
+- There is no footer; the owner removed it and doesn't want one.
 - `builds.html` and `blogs.html` still exist as separate pages. Edits to builds or blogs content may need to go in both places.
-- No page has a top navbar. Navigation is the palette, plus `#home` anchors on the home page.
+- No page has a top navbar. Navigation is the palette, whose home, builds and blogs entries jump to `#home`, `#builds` and `#blogs`.
 
-**CSS layout.** `styles.css` holds the original rules first, followed by appended blocks: smooth effects, theme toggle, view transitions, progressive blur and one-page layout, and the cozy footer.
+**CSS layout.** `styles.css` holds the original rules first, followed by appended blocks: smooth effects, theme toggle, view transitions, progressive blur and one-page layout, and the scroll reveal.
+- The scroll reveal is tuned to match https://cookified.github.io/: a 10px rise with a spring (stiffness 140, damping 22) sampled into `linear()` easing, triggered 40px inside the viewport.
 - `body { height: auto; min-height: 100% }` must stay. If `body` gets `height: 100%` together with `overflow-x: hidden`, `<body>` becomes the scroll container, `window.scrollY` stays 0, and the progressive blur and smooth scrolling stop working.
 
-**Attribution.** The Skiper UI components (skiper41 and skiper26) are vanilla rebuilds of React/Tailwind originals. Their license requires attribution: keep the credit comments in the code and the "ui bits inspired by skiper ui" line in the footer.
+**Attribution.** The Skiper UI components (skiper41 and skiper26) are vanilla rebuilds of React/Tailwind originals. Their license requires attribution: keep the credit comments in the code. The visible "ui bits inspired by skiper ui" line went away with the footer.
 
 ## Known quirks
 
