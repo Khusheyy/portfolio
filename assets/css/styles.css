@@ -379,7 +379,7 @@ html.theme-light .theme-toggle {
 }
 
 .palette-item span::before {
-  content: "• ";
+  content: "- ";
 }
 
 .palette-footer {
@@ -1149,7 +1149,7 @@ html.theme-light .project-card:hover {
   transform: translate(-50%, -50%) scale(1.02);
 }
 
-/* Floating ⌘K button: gentle lift */
+/* Floating cmd+K button: gentle lift */
 .command-palette-btn {
   transition: background-color 0.4s ease, border-color 0.4s ease,
     box-shadow 0.3s ease, transform 0.25s ease;
@@ -1259,7 +1259,7 @@ html.theme-switching::view-transition-new(root) {
 
 /* ==========================================================
    NO NAVBAR + PROGRESSIVE BLUR (all pages) and
-   ONE-PAGE HOME (index.html only — scoped to .one-page)
+   ONE-PAGE HOME (index.html only - scoped to .one-page)
    home -> builds -> blogs
 ========================================================== */
 
@@ -1270,12 +1270,12 @@ html.theme-switching::view-transition-new(root) {
   }
 }
 
-/* Floating controls, bottom-right on every page: [theme toggle] [⌘K] */
+/* Floating controls, bottom-right on every page: [theme toggle] [cmd+K] */
 .floating-controls {
   position: fixed;
   right: calc(16px + env(safe-area-inset-right));
   bottom: calc(16px + env(safe-area-inset-bottom));
-  z-index: 999; /* above the progressive blur (998), below the ⌘K palette (1000) */
+  z-index: 999; /* above the progressive blur (998), below the cmd+K palette (1000) */
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1315,7 +1315,7 @@ html.theme-switching::view-transition-new(root) {
   position: fixed;
   left: 0;
   width: 100%;
-  z-index: 998; /* below the floating controls (999) and the ⌘K palette (1000) */
+  z-index: 998; /* below the floating controls (999) and the cmd+K palette (1000) */
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;

@@ -1,4 +1,4 @@
-// Global theme — same key 'theme' and <html> class on every page (home, blogs, builds)
+// Global theme - same key 'theme' and <html> class on every page (home, blogs, builds)
 var themeKey = 'theme';
 var root = document.documentElement;
 
@@ -94,7 +94,7 @@ function toggleTheme(e) {
   }
 }
 
-// Floating controls, bottom-right on every page: [theme toggle] [⌘K]
+// Floating controls, bottom-right on every page: [theme toggle] [cmd+K]
 // (direct child of <body>, so page animations never move them)
 (function () {
   if (!document.body || document.querySelector('.floating-controls')) return;
@@ -199,7 +199,7 @@ function updateAge() {
   }
 }
 
-// Command palette — pages list (same on every page)
+// Command palette - pages list (same on every page)
 var PALETTE_PAGES = [
   { label: "home", path: "index.html#home", slug: "/" },
   { label: "builds", path: "index.html#builds", slug: "/builds" },
@@ -300,11 +300,11 @@ function initCommandPalette() {
   overlay.innerHTML =
     '<div class="palette-modal" role="dialog" aria-label="Navigate">' +
     '  <div class="palette-search-wrap">' +
-    '    <input type="text" class="palette-search" placeholder="search links…" autocomplete="off" />' +
+    '    <input type="text" class="palette-search" placeholder="search links..." autocomplete="off" />' +
     "  </div>" +
     '  <div class="palette-list"></div>' +
     '  <div class="palette-footer">' +
-    "    <span>↑↓ navigate</span><span>⏎ select</span><span>esc close</span>" +
+    "    <span>up/down navigate</span><span>enter select</span><span>esc close</span>" +
     "  </div>" +
     "</div>";
   overlay.addEventListener("click", function (e) {
@@ -374,7 +374,7 @@ async function loadMediumBlogs() {
     const posts = await res.json();
 
     if (!posts.length) {
-      if (loadingEl) loadingEl.textContent = "no posts yet — check back soon.";
+      if (loadingEl) loadingEl.textContent = "no posts yet - check back soon.";
       return;
     }
 
