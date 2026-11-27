@@ -60,5 +60,5 @@ Change shared head assets there, not in each page.
 
 ## Known quirks
 
-- Only `index.html` declares `<meta charset="UTF-8">`. Other pages can render characters such as ⌘ incorrectly.
+- Every page must declare `<meta charset="UTF-8">` as the first line of its `<head>`. The one `head-common.js` injects comes too late for the browser to use. Without it, ⌘, • and ↑↓ render as garbled symbols, including in `script.js` and `styles.css`, which use the page's encoding.
 - `.project-card` references `--border-color`, which is never defined.
